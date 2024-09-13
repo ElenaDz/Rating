@@ -2,13 +2,13 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: 15px;
 }
+
 .results {
   display: flex;
   margin: 5px 0 5px;
-
-  .count_votes span {
-    font-weight: normal;
-  }
+}
+.results .count_votes span {
+  font-weight: normal;
 }
 
 .inner_your_voice {
@@ -18,6 +18,9 @@ body {
 .bold {
   font-weight: 900;
 }
+
 .hide {
   display: none;
 }
+
+/*# sourceMappingURL=main.css.map */
