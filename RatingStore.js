@@ -3,13 +3,6 @@ class RatingStore
     static EVENT_UPDATE = 'RatingStore.EVENT_UPDATE';
 
     static keyLocalStore = 'vote';
-    static flag_init;
-    static init()
-    {
-        if (RatingStore.flag_init) return;
-
-        RatingStore.flag_init = true;
-    }
 
     static getRating()
     {

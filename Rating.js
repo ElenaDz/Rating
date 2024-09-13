@@ -1,7 +1,5 @@
 class Rating
 {
-    static EVENT_UPDATE = 'Rating.EVENT_UPDATE';
-
     /**
      * @param {JQuery} $context
      */
