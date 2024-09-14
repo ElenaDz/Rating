@@ -9,17 +9,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
-    <link href="node_modules/jquery-bar-rating/dist/themes/css-stars.css"
-          rel="stylesheet">
+
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-    <link rel="stylesheet" href="node_modules/jquery-bar-rating/dist/themes/css-stars.css">
+    <link href="node_modules/jquery-bar-rating/dist/themes/css-stars.css"  rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
             integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script  src="node_modules/jquery-bar-rating/jquery.barrating.js"></script>
+    <script  src="node_modules/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
 </head>
 <body>
     <div class="b_rating">
+
+        <!-- fixme id не используется, удаляй все что не используется Ты бы быстро поняла почему это важно если бы ты была на моем -->
+        <!--  месте, когда я проверяю я, проверяю все что написано так как привык что все что написано для чего-то нужно -->
         <select id="example-cssea" name="rating">
             <option value=""></option>
             <option value="1">1</option>
@@ -28,6 +30,8 @@
             <option value="4">4</option>
             <option value="5">5</option>
         </select>
+
+        <!-- fixme заполни уже поставленные оценки например рейтинг 4.5 количество голосов 2 -->
         <div class="b_text hide">
             <div class="results">
                 Рейтинг &nbsp
@@ -40,10 +44,11 @@
                 <div class="your_voice bold"></div>
             </div>
         </div>
+
     </div>
 
-
     <script src="RatingText.js"></script>
+    <script src="RatingStoreData.js"></script>
     <script src="RatingStore.js"></script>
     <script src="Rating.js"></script>
     <script type="text/javascript">
