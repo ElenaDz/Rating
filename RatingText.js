@@ -19,7 +19,6 @@ class RatingText {
         })
     }
 
-
     set rating(rating) {
         this.$context.find('.rating_all').text(rating);
     }

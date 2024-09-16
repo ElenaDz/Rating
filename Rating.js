@@ -5,7 +5,6 @@ class Rating
 
     // fixme убрать работу с этим объектом из этого класса, я просил чтобы RatingText был полностью независимым, здесь
     //  максимум его создание и все ok
-
     /** @type {JQuery} $context */
     $context;
 
@@ -85,7 +84,6 @@ class Rating
         return rating_data.has_your_voice ? (((sum_rating - rating_data.stars + parseInt(value)) / count_votes)) : (((sum_rating + parseInt(value)) / (count_votes + 1)))
     }
 
-
     build() {
         let rating_data = RatingStore.getRating();
         // fixme даже phpstorm подсвечивает это как ошибку Проверка из двух символов - не строгая, с авто преобразованием типов ок
@@ -104,7 +102,6 @@ class Rating
     showRatingText() {
         this.$context.find('.b_text').removeClass('hide');
     }
-
 
     /**
      * @param $context
