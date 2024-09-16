@@ -1,7 +1,7 @@
 
 class RatingStoreData{
-    stars = null;
+    stars = 0;
     rating = 0;
     count_votes = 0;
-    flag = false;
+    has_your_voice = false;
 }

@@ -1,10 +1,24 @@
 class RatingText {
     /**
-     * @param {JQuery}$context
+     * @param {JQuery} $context
      */
     constructor($context) {
         this.$context = $context;
+
+        this.bindEvents();
     }
+
+    bindEvents() {
+        $('body').on(Rating.EVENT_CHANGE_TEXT, () =>
+        {
+            let rating_data = RatingStore.getRating();
+
+            this.yourVoice  = rating_data.stars;
+            this.rating     = rating_data.rating;
+            this.countVotes = rating_data.count_votes;
+        })
+    }
+
 
     set rating(rating) {
         this.$context.find('.rating_all').text(rating);
@@ -13,7 +27,7 @@ class RatingText {
     set countVotes(count_votes) {
         this.$context.find('.count_votes').
         html(
-            count_votes + ' ' + '<span>' + this.declofNum(count_votes, ['человек', 'человека', 'человек']) + '</span>'
+            count_votes + ' ' + '<span>' + RatingText.declofNum(count_votes, ['человек', 'человека', 'человек']) + '</span>'
         );
     }
 
@@ -21,8 +35,8 @@ class RatingText {
         this.$context.find('.your_voice').text(your_voice);
     }
 
-    // fixme сделай этот метод статическим так как он не работает со свойствами объекта
-    declofNum(number, titles) {
+    // fixme сделай этот метод статическим так как он не работает со свойствами объекта ok
+    static declofNum(number, titles) {
         let cases = [2, 0, 1, 1, 1, 2];
         return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
     }
