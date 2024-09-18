@@ -81,8 +81,7 @@ class Rating
 
     build() {
         let rating_data = RatingStore.getRating();
-        // fixme даже phpstorm подсвечивает это как ошибку Проверка из двух символов - не строгая, с авто преобразованием типов ок
-        //  не нужно используй трех значные проверки здесь должно быть !== ok
+
         if (!rating_data.rating === false) {
             this.showRatingText();
         }
