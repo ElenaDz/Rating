@@ -29,11 +29,13 @@ class RatingStore
     {
         // fixme создай объект RatingStoreData с помощью new и заполни его свойства, сейчас ты все еще создаешь объект на основе
         //  анонимного класса
-        return {
-                stars: stars,
-                rating: rating,
-                count_votes: count_votes,
-                has_your_voice: has_your_voice
-        }
+        let rating_store_data = new RatingStoreData();
+
+        rating_store_data.stars = stars;
+        rating_store_data.rating = rating;
+        rating_store_data.count_votes = count_votes;
+        rating_store_data.has_your_voice = has_your_voice;
+
+        return rating_store_data;
     }
 }
