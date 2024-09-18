@@ -47,7 +47,9 @@ class Rating
             theme: 'css-stars',
             initialRating: parseInt(rating_data.stars) || parseInt(rating_data.rating),
             // fixme не нужно использовать однострочный синтаксис анонимных функций как здесь, это ухудшает читаемость (не знаю как исправить)
-            onSelect: (value, text, event) => this.onRatingSelect(value, event)
+            onSelect: (value, text, event) => {
+                this.onRatingSelect(value, event)
+            }
         })
     }
 
@@ -57,7 +59,7 @@ class Rating
         if (typeof (event) !== 'undefined') {
             let rating_data = RatingStore.getRating();
 
-            if (rating_data.rating === 0) {
+            if (!rating_data.rating) {
                 RatingStore.setRating(value, true, value, 1);
 
             } else {
@@ -81,6 +83,9 @@ class Rating
         let sum_rating = rating_data.rating * count_votes;
         // fixme можно переписать избавиться от двух return и двух toFixed ok
 
+        console.log(sum_rating)
+        console.log(count_votes)
+        console.log(rating_data.rating)
         return rating_data.has_your_voice ? (((sum_rating - rating_data.stars + parseInt(value)) / count_votes)) : (((sum_rating + parseInt(value)) / (count_votes + 1)))
     }
 
@@ -88,7 +93,7 @@ class Rating
         let rating_data = RatingStore.getRating();
         // fixme даже phpstorm подсвечивает это как ошибку Проверка из двух символов - не строгая, с авто преобразованием типов ок
         //  не нужно используй трех значные проверки здесь должно быть !== ok
-        if (rating_data.rating !== 0) {
+        if (!rating_data.rating === false) {
             this.showRatingText();
         }
         // fixme тут вообще какая то магия с текстом null Постарайся избавиться от этого так не должно быть ok
