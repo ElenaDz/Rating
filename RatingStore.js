@@ -27,8 +27,6 @@ class RatingStore
      */
     static getMapRating(stars = 0, rating = 0, count_votes = 0, has_your_voice = false)
     {
-        // fixme создай объект RatingStoreData с помощью new и заполни его свойства, сейчас ты все еще создаешь объект на основе
-        //  анонимного класса
         let rating_store_data = new RatingStoreData();
 
         rating_store_data.stars = stars;
