@@ -18,7 +18,32 @@
     <script  src="node_modules/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
 </head>
 <body>
-    <div class="b_rating">
+    <div class="b_rating"  id="1">
+
+        <select name="rating" >
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <div class="b_text hide">
+            <div class="results">
+                Рейтинг &nbsp
+                <div class="rating_all bold"></div>
+                , проголосовало &nbsp
+                <div class="count_votes bold"></div>
+            </div>
+            <div class="inner_your_voice hide">
+                Bы поставили &nbsp
+                <div class="your_voice bold"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="b_rating"  id="2">
 
         <select name="rating">
             <option value=""></option>
@@ -50,7 +75,7 @@
     <script src="Rating.js"></script>
     <script type="text/javascript">
         $(function() {
-            Rating.create($('.b_rating'));
+           let rating =  Rating.create($('.b_rating'));
         });
     </script>
 

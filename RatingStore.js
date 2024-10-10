@@ -1,37 +1,45 @@
 class RatingStore
 {
-    static EVENT_UPDATE = 'RatingStore.EVENT_UPDATE';
-
     static key_local_store = 'vote';
 
     /**
-     * @returns {RatingStoreData}
+     * @returns {[RatingStoreData]}
      */
     static getRating()
     {
-        return JSON.parse(localStorage.getItem(RatingStore.key_local_store)) || [this.getMapRating()];
+        return JSON.parse(localStorage.getItem(RatingStore.key_local_store));
     }
 
-    static setRating(stars, has_your_voice, rating = 0, count_votes = 0)
+    static setRating(rating_data, id_rating, stars, has_your_voice)
     {
+        let list_ratings = [];
+
+        rating_data.forEach((/** Rating */rating) =>
+        {
+            if (rating.id_rating === id_rating){
+                rating = this.getMapRating(stars, rating.id_rating, has_your_voice)
+            } else if (!id_rating){
+                rating = this.getMapRating(0, rating.id_rating, has_your_voice)
+            }
+
+            list_ratings.push(rating);
+        });
+
         localStorage.setItem(
             RatingStore.key_local_store,
-            JSON.stringify(this.getMapRating(stars, rating, count_votes, has_your_voice))
+            JSON.stringify(list_ratings)
         );
-
-        $('body').trigger(RatingStore.EVENT_UPDATE);
     }
 
     /**
      * @returns {RatingStoreData}
      */
-    static getMapRating(stars = 0, rating = 0, count_votes = 0, has_your_voice = false)
+    static getMapRating(stars = 0, id_rating , has_your_voice = false)
     {
         let rating_store_data = new RatingStoreData();
 
         rating_store_data.stars = stars;
-        rating_store_data.rating = rating;
-        rating_store_data.count_votes = count_votes;
+        rating_store_data.id_rating = id_rating;
         rating_store_data.has_your_voice = has_your_voice;
 
         return rating_store_data;
