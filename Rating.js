@@ -62,9 +62,9 @@ class Rating
     }
 
     // Метод проставляет звезду, в случае повторного выбора той же звезды
-    // При повторном нажатиии той же звезда, звёзды исчезали
-    eventReSelect() {
-
+    // При повторном нажатии той же звезда, звёзды исчезали
+    eventReSelect()
+    {
         this.$context.on(Rating.EVENT_RE_SELECT, () =>
         {
             let rating_data = RatingStore.getRating();
@@ -72,15 +72,14 @@ class Rating
             rating_data.forEach((/** RatingStoreData */ rating_store) =>
             {
                 if (rating_store.id_rating === this.id_rating) {
-
                     this.rating.barrating('set', rating_store.stars || Math.floor(this.data_rating));
                 }
             })
         })
     }
 
-    configureRatingWidget(initialRating) {
-
+    configureRatingWidget(initialRating)
+    {
         this.rating.barrating('show', {
             theme: 'css-stars',
             initialRating: parseFloat(initialRating) || this.data_rating,
@@ -90,16 +89,17 @@ class Rating
         });
     }
 
-    onRatingSelect(value, event) {
-
+    onRatingSelect(value, event)
+    {
         if (typeof (event) === 'undefined') return;
 
         let rating_data = RatingStore.getRating();
 
-        rating_data.forEach((/** RatingStoreData */ rating_store) => {
-
-            if (rating_store.id_rating === this.id_rating) {
-                if (!value) {
+        rating_data.forEach((/** RatingStoreData */ rating_store) =>
+        {
+            if (rating_store.id_rating === this.id_rating)
+            {
+                if ( ! value) {
                     this.$context.trigger(Rating.EVENT_RE_SELECT)
                     value =  rating_store.stars || Math.floor(this.data_rating)
                 }
@@ -113,6 +113,7 @@ class Rating
         this.$context.find('.text').trigger(Rating.EVENT_RATING_SELECT);
     }
 
+    // fixme мы находимся в классе rating зачем здесь слово rating? убрать
     get id_rating() {
         return this.$context.attr('id');
     }
@@ -121,14 +122,33 @@ class Rating
         return parseFloat(this.$context.data('rating')) || 0;
     }
 
+    // todo не хватает getter и setter для моей оценки Я их создал Напиши реализацию Работать с localStore
+    //  можно только внутри этих двух методов во всех остальных местах обращение к localStore необходимо убрать
+    //  то как сделано сейчас очень сложно я пытаюсь понять что ты сделала и не понимаю, хотя там должно быть все
+    //  элементарно и будет элементарно когда появляться это свойство
+    get rating_my() {
+
+    }
+
+    set rating_my(rating) {
+
+    }
+
+
+    // fixme это не data count votes это просто count votes Сейчас мы храним их в data атрибуте, потом передумаем
+    //  и будем хранить в другом месте, это не как не должно влиять на имя свойства по которому мы получаем количество
+    //  проголосовавших Тоже самое касается свойства data_rating
     get data_count_votes() {
         return this.$context.data('count_votes') || 0;
     }
+
+
     /**
      * @param $context
      * @returns {Rating[]}
      */
-    static create($context = $('.b_rating')) {
+    static create($context = $('.b_rating'))
+    {
         let $ratings = $context;
         /** @type {Rating[]} */
         let ratings = [];
@@ -137,7 +157,8 @@ class Rating
             ratings.push(new Rating(rating));
         })
 
-        if (!RatingStore.getRating()) RatingStore.setRating(ratings);
+        if ( ! RatingStore.getRating()) RatingStore.setRating(ratings);
+
         return ratings;
     }
 }
