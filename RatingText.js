@@ -17,6 +17,7 @@ class RatingText {
     }
 
     eventRatingInit() {
+
         this.$context.on(Rating.EVENT_RATING_INIT, () =>
         {
             if (!this.rating === false) {
@@ -27,27 +28,27 @@ class RatingText {
 
             if (!rating_data) return;
 
-            rating_data.forEach((/** RatingStoreData */ rating_store) => {
+            rating_data.forEach((/** RatingStoreData */ rating_store) =>
+            {
                 if (rating_store.id_rating === this.getDataId()) {
-                    if (rating_store.has_your_voice ) {
+                    if (rating_store.stars > 0) {
 
                         this.$context.find('.inner_your_voice').removeClass('hide');
 
                         this.yourVoice = rating_store.stars;
 
-                        let initial_rating = rating_store.has_your_voice ? rating_store.stars : this.rating;
+                        let initial_rating = rating_store.stars;
 
                         this.rating = this.calculateNewRatingInit(parseFloat(initial_rating), rating_store).toFixed(1);
 
                         this.countVotes = this.countVotes + 1;
-
                     }
+
                     if (!this.rating === false) {
                         this.showRatingText();
                     }
                 }
             })
-
         })
     }
 
@@ -61,17 +62,17 @@ class RatingText {
             rating_data.forEach((/** RatingStoreData */ rating_store) => {
 
                 if (rating_store.id_rating === this.getDataId()) {
-                    if (this.yourVoice > 0) {
+                    if (rating_store.stars > 0) {
 
                         this.rating = this.calculateNewRating(this.yourVoice, rating_store).toFixed(1);
 
-                        rating_store.stars = this.yourVoice;
-                    }
+                        if (!this.yourVoice) {
+                            this.countVotes = this.countVotes + 1;
 
-                    if (rating_store.has_your_voice === false) {
-                        this.countVotes = this.countVotes + 1;
+                            this.$context.find('.inner_your_voice').removeClass('hide');
+                        }
 
-                        this.$context.find('.inner_your_voice').removeClass('hide');
+                        this.yourVoice = rating_store.stars;
                     }
                 }
 
@@ -79,8 +80,6 @@ class RatingText {
                     this.showRatingText();
                 }
             })
-
-            RatingStore.setRating(rating_data, this.getDataId(), this.yourVoice, true);
         })
     }
 
@@ -89,22 +88,24 @@ class RatingText {
         let count_votes = this.countVotes;
         let sum_rating = this.rating * count_votes ;
 
-        return rating_store.has_your_voice
+        return rating_store.stars > 0
             ? (((sum_rating + value )/ (count_votes + 1)))
             : this.rating;
     }
     calculateNewRating(value, rating_store)
     {
         let count_votes = this.countVotes || 0;
-        let sum_rating = (this.rating || 0)  * count_votes ;
-
-        return rating_store.has_your_voice
-            ? (((sum_rating - rating_store.stars + value) / count_votes))
-            : (((sum_rating + value) / (count_votes + 1)));
+        let sum_rating = (this.rating || 0)  * count_votes;
+        let stars = parseInt(rating_store.stars);
+        value = parseInt(value);
+        
+        return value > 0
+            ? (((sum_rating + stars - value) / count_votes))
+            : (((sum_rating + stars) / (count_votes + 1)));
     }
 
     getDataId() {
-        return this.$context.data('id')
+        return this.$context.data('id');
     }
     showRatingText() {
         this.$context.removeClass('hide');
@@ -146,6 +147,6 @@ class RatingText {
      * @param {JQuery} $parent_context
      */
     static create($parent_context) {
-        return new RatingText($parent_context.find('.b_text'));
+        return new RatingText($parent_context.find('.text'));
     }
 }
