@@ -92,6 +92,7 @@ class RatingText {
             ? (((sum_rating + value )/ (count_votes + 1)))
             : this.rating;
     }
+
     calculateNewRating(value, rating_store)
     {
         let count_votes = this.countVotes || 0;

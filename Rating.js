@@ -89,7 +89,6 @@ class Rating
         this.$context.find('.text').trigger(Rating.EVENT_RATING_SELECT);
     }
 
-    // fixme мы находимся в классе rating зачем здесь слово rating? убрать ok
     get id() {
         return this.$context.attr('id');
     }
@@ -133,9 +132,6 @@ class Rating
     }
 
 
-    // fixme это не data count votes это просто count votes Сейчас мы храним их в data атрибуте, потом передумаем
-    //  и будем хранить в другом месте, это не как не должно влиять на имя свойства по которому мы получаем количество
-    //  проголосовавших Тоже самое касается свойства all_rating ok
     get count_votes() {
         return this.$context.data('count_votes') || 0;
     }
