@@ -30,9 +30,9 @@ class Rating
     
     initRating() {
 
-        this.$context.find('.text').data('id', this.id_rating);
-        this.$context.find('.rating_all').text(this.data_rating);
-        this.$context.find('.count_votes').text(this.data_count_votes);
+        this.$context.find('.text').data('id', this.id);
+        this.$context.find('.rating_all').text(this.all_rating);
+        this.$context.find('.count_votes').text(this.count_votes);
 
         this.$context.find('.text').trigger(Rating.EVENT_RATING_INIT);
 
@@ -40,25 +40,16 @@ class Rating
 
         let rating_data = RatingStore.getRating();
 
-        if (!rating_data){
+        if (!rating_data) {
             this.configureRatingWidget( 0);
             return;
         }
 
-        rating_data.forEach((/** RatingStoreData */ rating_store) =>
-        {
-            if (rating_store.id_rating === this.id_rating) {
-                let initial_rating = rating_store.stars ||  this.data_rating;
+        let initial_rating = this.my_grade ||  this.all_rating;
 
-                this.rating.barrating('set', initial_rating);
+        this.rating.barrating('set', initial_rating);
 
-                this.configureRatingWidget( initial_rating);
-
-            } else {
-
-                this.configureRatingWidget( this.data_rating);
-            }
-        });
+        this.configureRatingWidget( initial_rating);
     }
 
     // Метод проставляет звезду, в случае повторного выбора той же звезды
@@ -67,14 +58,7 @@ class Rating
     {
         this.$context.on(Rating.EVENT_RE_SELECT, () =>
         {
-            let rating_data = RatingStore.getRating();
-
-            rating_data.forEach((/** RatingStoreData */ rating_store) =>
-            {
-                if (rating_store.id_rating === this.id_rating) {
-                    this.rating.barrating('set', rating_store.stars || Math.floor(this.data_rating));
-                }
-            })
+            this.rating.barrating('set', this.my_grade || Math.floor(this.all_rating));
         })
     }
 
@@ -82,7 +66,7 @@ class Rating
     {
         this.rating.barrating('show', {
             theme: 'css-stars',
-            initialRating: parseFloat(initialRating) || this.data_rating,
+            initialRating: parseFloat(initialRating) || this.all_rating,
             onSelect: (value, text, event) => {
                 this.onRatingSelect(value, event);
             }
@@ -93,52 +77,66 @@ class Rating
     {
         if (typeof (event) === 'undefined') return;
 
-        let rating_data = RatingStore.getRating();
+        if (!value) {
+            this.$context.trigger(Rating.EVENT_RE_SELECT);
 
-        rating_data.forEach((/** RatingStoreData */ rating_store) =>
-        {
-            if (rating_store.id_rating === this.id_rating)
-            {
-                if ( ! value) {
-                    this.$context.trigger(Rating.EVENT_RE_SELECT)
-                    value =  rating_store.stars || Math.floor(this.data_rating)
-                }
+            this.my_grade = this.my_grade || Math.floor(this.all_rating);
 
-                rating_store.stars = value;
-            }
-        })
-
-        RatingStore.setRating(rating_data, this.id_rating, value);
+        } else {
+            this.my_grade = value;
+        }
 
         this.$context.find('.text').trigger(Rating.EVENT_RATING_SELECT);
     }
 
-    // fixme мы находимся в классе rating зачем здесь слово rating? убрать
-    get id_rating() {
+    // fixme мы находимся в классе rating зачем здесь слово rating? убрать ok
+    get id() {
         return this.$context.attr('id');
     }
 
-    get data_rating() {
-        return parseFloat(this.$context.data('rating')) || 0;
+    get all_rating() {
+        return parseFloat(this.$context.data('all_rating')) || 0;
     }
 
     // todo не хватает getter и setter для моей оценки Я их создал Напиши реализацию Работать с localStore
     //  можно только внутри этих двух методов во всех остальных местах обращение к localStore необходимо убрать
     //  то как сделано сейчас очень сложно я пытаюсь понять что ты сделала и не понимаю, хотя там должно быть все
-    //  элементарно и будет элементарно когда появляться это свойство
-    get rating_my() {
+    //  элементарно и будет элементарно когда появляться это свойство ok
+    get my_grade()
+    {
+        let my_grade;
 
+        let rating_data = RatingStore.getRating();
+
+        rating_data.forEach((/** RatingStoreData */ rating_store) =>
+        {
+            if (rating_store.id_rating === this.id) {
+               my_grade = rating_store.stars;
+            }
+        })
+
+        return my_grade;
     }
 
-    set rating_my(rating) {
+    set my_grade(grade)
+    {
+        let rating_data = RatingStore.getRating();
 
+        rating_data.forEach((/** RatingStoreData */ rating_store) =>
+        {
+            if (rating_store.id_rating === this.id) {
+                rating_store.stars = grade;
+            }
+        })
+
+        RatingStore.setRating(rating_data, this.id, grade);
     }
 
 
     // fixme это не data count votes это просто count votes Сейчас мы храним их в data атрибуте, потом передумаем
     //  и будем хранить в другом месте, это не как не должно влиять на имя свойства по которому мы получаем количество
-    //  проголосовавших Тоже самое касается свойства data_rating
-    get data_count_votes() {
+    //  проголосовавших Тоже самое касается свойства all_rating ok
+    get count_votes() {
         return this.$context.data('count_votes') || 0;
     }
 
