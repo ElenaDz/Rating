@@ -108,6 +108,7 @@ class RatingText {
     getDataId() {
         return this.$context.data('id');
     }
+
     showRatingText() {
         this.$context.removeClass('hide');
     }
