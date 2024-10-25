@@ -1,11 +1,12 @@
 class Rating {
     constructor($context) {
         this.$context = $context;
-        this.base_all_rating = this.all_rating;
+        this.rating_base = this.rating;
         new RatingText(this);
-        // Не знаю как испровить ошибку. Но всё работает
+        // @ts-ignore
         if (this.$context[0].Rating)
             return;
+        // @ts-ignore
         this.$context[0].Rating = this;
         this.initRating();
     }
@@ -23,7 +24,7 @@ class Rating {
             this.configureRatingWidget(0);
             return;
         }
-        let initial_rating = this.rating_my || this.all_rating;
+        let initial_rating = this.rating_my || this.rating;
         this.$bar_rating.barrating('set', initial_rating);
         this.configureRatingWidget(initial_rating);
         $('body').trigger(Rating.EVENT_INIT);
@@ -31,7 +32,7 @@ class Rating {
     configureRatingWidget(initialRating) {
         this.$bar_rating.barrating('show', {
             theme: 'css-stars',
-            initialRating: parseFloat(initialRating) || this.all_rating,
+            initialRating: parseFloat(initialRating) || this.rating,
             onSelect: (value, text, event) => {
                 this.onRatingSelect(value, event);
             }
@@ -41,8 +42,8 @@ class Rating {
         if (typeof (event) === 'undefined')
             return;
         if (!selected_star) {
-            this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.all_rating));
-            this.rating_my = this.rating_my || Math.floor(this.all_rating);
+            this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.rating));
+            this.rating_my = this.rating_my || Math.floor(this.rating);
         }
         else {
             this.rating_my = selected_star;
@@ -52,18 +53,18 @@ class Rating {
         this.$context.trigger(Rating.EVENT_SELECT);
     }
     updateRating() {
-        this.all_rating = parseFloat(this.calculate(this.rating_my).toFixed(1));
+        this.rating = parseFloat(this.calculate(this.rating_my).toFixed(1));
     }
     calculate(rating_my) {
         return rating_my > 0
-            ? (((this.base_all_rating * (this.count_votes - 1)) + parseInt(rating_my)) / this.count_votes)
-            : this.all_rating;
+            ? (((this.rating_base * (this.count_votes - 1)) + parseInt(rating_my)) / this.count_votes)
+            : this.rating;
     }
     get id() {
         return this.$context.attr('id');
     }
-    get all_rating() {
-        return parseFloat(this.$context.data('all_rating') || 0);
+    get rating() {
+        return parseFloat(this.$context.data('rating') || 0);
     }
     get count_votes() {
         return !this.rating_my
@@ -96,8 +97,8 @@ class Rating {
             this.$context.data('rating_my', rating_my);
         }
     }
-    set all_rating(rating) {
-        this.$context.data('all_rating', rating);
+    set rating(rating) {
+        this.$context.data('rating', rating);
     }
     static create($context = $('.b_rating')) {
         let $ratings = $context;

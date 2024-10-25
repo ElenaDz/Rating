@@ -18,7 +18,7 @@
     <script  src="node_modules/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
 </head>
 <body>
-    <div class="b_rating" data-all_rating="3" data-count_votes="2" id="1">
+    <div class="b_rating" data-rating="3" data-count_votes="2" id="1">
 
         <select name="rating" >
             <option value=""></option>
@@ -68,7 +68,7 @@
         </div>
 
     </div>
-    <div class="b_rating" data-all_rating="" data-count_votes="" id="3">
+    <div class="b_rating" data-rating="" data-count_votes="" id="3">
 
         <select name="rating" >
             <option value=""></option>
@@ -86,7 +86,7 @@
     <script src="ts/Rating.js"></script>
     <script type="text/javascript">
         $(function() {
-           let rating = Rating.create()
+           let rating = Rating.create();
         });
     </script>
 
