@@ -1,3 +1,4 @@
+
 class RatingStore
 {
     static KEY_LOCAL_STORE = 'rating_store_data';
@@ -5,14 +6,12 @@ class RatingStore
     /**
      * @returns {[RatingStoreData]}
      */
-    static getRating()
+    public static getRating()
     {
-        return JSON.parse(
-            localStorage.getItem(RatingStore.KEY_LOCAL_STORE)
-        );
+        return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [new RatingStoreData()];
     }
 
-    static setRating(rating_data, id_rating, stars)
+    public static setRating(rating_data, id_rating, stars)
     {
         let list_ratings = [];
 
@@ -33,10 +32,21 @@ class RatingStore
         );
     }
 
+    // переделать функцию private findElement(array, id) в хезрейтингстор
+
+    public static hesRatingStore(id)
+    {
+        let rating_data = RatingStore.getRating();
+
+        return  !rating_data.find( (rating_store) => rating_store.id_rating === id ) === false;
+    }
+
+
+
     /**
      * @returns {RatingStoreData}
      */
-    static getMapRating(stars = 0, id_rating )
+    public static getMapRating(stars = 0, id_rating )
     {
         let rating_store_data = new RatingStoreData();
 
