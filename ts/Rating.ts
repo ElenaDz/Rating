@@ -3,10 +3,10 @@ class Rating
 {
 	static readonly EVENT_INIT = 'Rating.EVENT_INIT';
 	static readonly EVENT_SELECT = 'Rating.EVENT_SELECT';
+	// fixme удалить - не используется
 	static readonly EVENT_RE_SELECT = 'Rating.EVENT_RE_SELECT';
 
 	public $context: JQuery;
-	// fixme это класс rating не нужно здесь слово rating писать еще раз, это просто $bar ok
 	private $bar: JQuery;
 	private readonly rating_base: number;
 
@@ -37,7 +37,7 @@ class Rating
 
 		this.updateRating();
 
-		if (!this.rating_my) {
+		if ( ! this.rating_my) {
 			this.rating_my = 0;
 
 			this.configureRatingWidget( 0);
@@ -71,7 +71,7 @@ class Rating
 	{
 		if (typeof (event) === 'undefined') return;
 
-		if (!selected_star) {
+		if ( ! selected_star) {
 			this.$bar.barrating('set', this.rating_my || Math.floor(this.rating_all));
 
 			this.rating_my = this.rating_my || Math.floor(this.rating_all);
@@ -111,11 +111,13 @@ class Rating
 
 	public get count_votes():number
 	{
-		return  !this.rating_my
-		? parseInt(this.$context.data('count_votes') || 0)
-		: parseInt((this.$context.data('count_votes') || 0) + 1);
+		// fixme повторяющийся код вынеси в переменную
+		return  ! this.rating_my
+			? parseInt(this.$context.data('count_votes') || 0)
+			: parseInt((this.$context.data('count_votes') || 0) + 1);
 	}
 
+	// fixme сократи метод до одной строки, смотри ниже подробнее
 	public get rating_my(): number
 	{
 		let rating_my;
@@ -132,14 +134,19 @@ class Rating
 		return rating_my;
 	}
 
+	// fixme Rating не должен так много знать про RatingStore, все что он должен у долен уметь это дергать один
+	//  метод "сохрани мою оценку для такого то id" setRatingMeForId(id, rating_my), полностью переписать этот метод
+	//  сократив его до одной строки вызова этого метода
 	private set rating_my(rating_my: number)
 	{
 		let rating_data = RatingStore.getRating();
 
-		if (!RatingStore.hesRatingStore(this.id)) {
+		if ( ! RatingStore.hesRatingStore(this.id))
+		{
 			rating_data.push(RatingStore.getMapRating(rating_my, this.id));
 
 			RatingStore.setRating(rating_data, this.id, rating_my);
+
 		} else {
 			rating_data.forEach((/** RatingStoreData */ rating_store) =>
 			{

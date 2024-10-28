@@ -65,10 +65,12 @@ class Rating {
         return parseFloat(this.$context.data('rating_all') || 0);
     }
     get count_votes() {
+        // fixme повторяющийся код вынеси в переменную
         return !this.rating_my
             ? parseInt(this.$context.data('count_votes') || 0)
             : parseInt((this.$context.data('count_votes') || 0) + 1);
     }
+    // fixme сократи метод до одной строки, смотри ниже подробнее
     get rating_my() {
         let rating_my;
         let rating_data = RatingStore.getRating();
@@ -79,6 +81,9 @@ class Rating {
         });
         return rating_my;
     }
+    // fixme Rating не должен так много знать про RatingStore, все что он должен у долен уметь это дергать один
+    //  метод "сохрани мою оценку для такого то id" setRatingMeForId(id, rating_my), полностью переписать этот метод
+    //  сократив его до одной строки вызова этого метода
     set rating_my(rating_my) {
         let rating_data = RatingStore.getRating();
         if (!RatingStore.hesRatingStore(this.id)) {
@@ -111,4 +116,5 @@ class Rating {
 }
 Rating.EVENT_INIT = 'Rating.EVENT_INIT';
 Rating.EVENT_SELECT = 'Rating.EVENT_SELECT';
+// fixme удалить - не используется
 Rating.EVENT_RE_SELECT = 'Rating.EVENT_RE_SELECT';
