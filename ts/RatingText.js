@@ -4,24 +4,25 @@ class RatingText {
         this.$context = this.Rating.$context.find('.text');
         $('body').on(Rating.EVENT_INIT + ' ' + Rating.EVENT_SELECT, () => {
             this.update();
-            this.showRatingText();
+            if (this.Rating.rating_all)
+                this.showRatingText();
         });
     }
     update() {
-        this.updateRating(this.Rating.all_rating, this.Rating.count_votes, this.Rating.rating_my);
+        this.updateRating(this.Rating.rating_all, this.Rating.count_votes, this.Rating.rating_my);
     }
-    updateRating(rating, count_vote, rating_my) {
-        this.rating = rating;
-        this.countVotes = count_vote;
+    updateRating(rating_all, count_vote, rating_my) {
+        this.rating_all = rating_all;
+        this.count_votes = count_vote;
         this.rating_my = rating_my;
     }
     showRatingText() {
         this.$context.removeClass('hide');
     }
-    set rating(rating) {
+    set rating_all(rating) {
         this.$context.find('.rating_all').text(rating);
     }
-    set countVotes(count_votes) {
+    set count_votes(count_votes) {
         this.$context.find('.count_votes').
             html(count_votes + ' ' + '<span>' + this.declofNum(count_votes, ['человек', 'человека', 'человек']) + '</span>');
     }

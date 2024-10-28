@@ -32,16 +32,12 @@ class RatingStore
         );
     }
 
-    // переделать функцию private findElement(array, id) в хезрейтингстор
-
     public static hesRatingStore(id)
     {
         let rating_data = RatingStore.getRating();
 
         return  !rating_data.find( (rating_store) => rating_store.id_rating === id ) === false;
     }
-
-
 
     /**
      * @returns {RatingStoreData}

@@ -11,23 +11,24 @@ class RatingText
 		$('body').on(Rating.EVENT_INIT +' '+ Rating.EVENT_SELECT, () =>
 		{
 			this.update();
-			this.showRatingText();
+
+			if (this.Rating.rating_all) this.showRatingText();
 		});
 	}
 
 	private update()
 	{
 		this.updateRating(
-			this.Rating.all_rating,
+			this.Rating.rating_all,
 			this.Rating.count_votes,
 			this.Rating.rating_my
 		);
 	}
 
-	private updateRating(rating, count_vote, rating_my)
+	private updateRating(rating_all, count_vote, rating_my)
 	{
-		this.rating = rating;
-		this.countVotes = count_vote;
+		this.rating_all = rating_all;
+		this.count_votes = count_vote;
 		this.rating_my = rating_my;
 	}
 
@@ -36,12 +37,12 @@ class RatingText
 		this.$context.removeClass('hide');
 	}
 
-	private set rating(rating)
+	private set rating_all(rating)
 	{
 		this.$context.find('.rating_all').text(rating);
 	}
 
-	private set countVotes(count_votes)
+	private set count_votes(count_votes)
 	{
 		this.$context.find('.count_votes').
 		html(

@@ -7,16 +7,15 @@ class Rating
 
 	public $context: JQuery;
 	private $bar_rating: JQuery;
-	private readonly base_all_rating: number;
+	private readonly rating_all_base: number;
 
 	constructor($context:JQuery) {
 		this.$context = $context;
 
-		this.base_all_rating = this.all_rating;
+		this.rating_all_base = this.rating_all;
 
 		new RatingText(this);
 
-		// Не знаю как испровить ошибку. Но всё работает
 		if (this.$context[0].Rating) return;
 
 		this.$context[0].Rating = this;
@@ -28,24 +27,23 @@ class Rating
 
 		this.$bar_rating = this.$context.find('select[name="rating"]').first();
 
-		let rating_data = RatingStore.getRating();
-
-		if (!RatingStore.hesRatingStore(this.id)) {
-			this.rating_my = 0;
-		}
-
 		if (this.rating_my > 0) {
 			this.$context.find('.inner_your_voice').removeClass('hide');
 		}
 
 		this.updateRating();
 
-		if (!rating_data) {
+		if (!this.rating_my) {
+			this.rating_my = 0;
+
 			this.configureRatingWidget( 0);
+
+			$('body').trigger(Rating.EVENT_INIT);
+
 			return;
 		}
 
-		let initial_rating = this.rating_my ||  this.all_rating;
+		let initial_rating = this.rating_my ||  this.rating_all;
 
 		this.$bar_rating.barrating('set', initial_rating);
 
@@ -54,11 +52,11 @@ class Rating
 		$('body').trigger(Rating.EVENT_INIT);
 	}
 
-	private configureRatingWidget(initialRating)
+	private configureRatingWidget(initial_rating)
 	{
 		this.$bar_rating.barrating('show', {
 			theme: 'css-stars',
-			initialRating: parseFloat(initialRating) || this.all_rating,
+			initialRating: parseFloat(initial_rating) || this.rating_all,
 			onSelect: (value, text, event) => {
 				this.onRatingSelect(value, event);
 			}
@@ -70,9 +68,9 @@ class Rating
 		if (typeof (event) === 'undefined') return;
 
 		if (!selected_star) {
-			this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.all_rating));
+			this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.rating_all));
 
-			this.rating_my = this.rating_my || Math.floor(this.all_rating);
+			this.rating_my = this.rating_my || Math.floor(this.rating_all);
 
 		} else {
 			this.rating_my = selected_star;
@@ -87,14 +85,14 @@ class Rating
 
 	private updateRating()
 	{
-		this.all_rating = parseFloat(this.calculate(this.rating_my).toFixed(1));
+		this.rating_all = parseFloat(this.calculate(this.rating_my).toFixed(1));
 	}
 
 	private calculate(rating_my)
 	{
 		return rating_my > 0
-			? (((this.base_all_rating * (this.count_votes - 1) ) + parseInt(rating_my) )/ this.count_votes )
-			: this.all_rating;
+			? (((this.rating_all_base * (this.count_votes - 1) ) + parseInt(rating_my) )/ this.count_votes )
+			: this.rating_all;
 	}
 
 	private get id(): string
@@ -102,9 +100,9 @@ class Rating
 		return this.$context.attr('id');
 	}
 
-	public get all_rating():number
+	public get rating_all():number
 	{
-		return parseFloat(this.$context.data('all_rating') || 0);
+		return parseFloat(this.$context.data('rating_all') || 0);
 	}
 
 	public get count_votes():number
@@ -152,12 +150,12 @@ class Rating
 		}
 	}
 
-	private set all_rating(rating: number)
+	private set rating_all(rating: number)
 	{
-		this.$context.data('all_rating', rating);
+		this.$context.data('rating_all', rating);
 	}
 
-	static create($context = $('.b_rating'))
+	public static create($context = $('.b_rating'))
 	{
 		let $ratings = $context;
 		/** @type {Rating[]} */
