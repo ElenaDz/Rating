@@ -18,7 +18,6 @@ class RatingStore {
         });
         localStorage.setItem(RatingStore.KEY_LOCAL_STORE, JSON.stringify(list_ratings));
     }
-    // переделать функцию private findElement(array, id) в хезрейтингстор
     static hesRatingStore(id) {
         let rating_data = RatingStore.getRating();
         return !rating_data.find((rating_store) => rating_store.id_rating === id) === false;

@@ -11,7 +11,7 @@ class Rating {
         this.initRating();
     }
     initRating() {
-        this.$bar_rating = this.$context.find('select[name="rating"]').first();
+        this.$bar = this.$context.find('select[name="rating"]').first();
         if (this.rating_my > 0) {
             this.$context.find('.inner_your_voice').removeClass('hide');
         }
@@ -23,15 +23,14 @@ class Rating {
             return;
         }
         let initial_rating = this.rating_my || this.rating_all;
-        this.$bar_rating.barrating('set', initial_rating);
+        this.$bar.barrating('set', initial_rating);
         this.configureRatingWidget(initial_rating);
         $('body').trigger(Rating.EVENT_INIT);
     }
     configureRatingWidget(initial_rating) {
-        this.$bar_rating.barrating('show', {
+        this.$bar.barrating('show', {
             theme: 'css-stars',
             initialRating: parseFloat(initial_rating) || this.rating_all,
-            initialRating: parseFloat(initialRating) || this.rating,
             onSelect: (value, text, event) => {
                 this.onRatingSelect(value, event);
             }
@@ -41,7 +40,7 @@ class Rating {
         if (typeof (event) === 'undefined')
             return;
         if (!selected_star) {
-            this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.rating_all));
+            this.$bar.barrating('set', this.rating_my || Math.floor(this.rating_all));
             this.rating_my = this.rating_my || Math.floor(this.rating_all);
         }
         else {
@@ -56,7 +55,7 @@ class Rating {
     }
     calculate(rating_my) {
         return rating_my > 0
-            ? (((this.rating_all_base * (this.count_votes - 1)) + parseInt(rating_my)) / this.count_votes)
+            ? (((this.rating_base * (this.count_votes - 1)) + parseInt(rating_my)) / this.count_votes)
             : this.rating_all;
     }
     get id() {

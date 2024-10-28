@@ -6,15 +6,15 @@ class Rating
 	static readonly EVENT_RE_SELECT = 'Rating.EVENT_RE_SELECT';
 
 	public $context: JQuery;
-	// fixme это класс rating не нужно здесь слово rating писать еще раз, это просто $bar
-	private $bar_rating: JQuery;
+	// fixme это класс rating не нужно здесь слово rating писать еще раз, это просто $bar ok
+	private $bar: JQuery;
 	private readonly rating_base: number;
 
 	constructor($context:JQuery)
 	{
 		this.$context = $context;
 
-		this.base_all_rating = this.all_rating;
+		this.rating_base = this.rating_all;
 
 		new RatingText(this);
 
@@ -29,7 +29,7 @@ class Rating
 
 	private initRating() {
 
-		this.$bar_rating = this.$context.find('select[name="rating"]').first();
+		this.$bar = this.$context.find('select[name="rating"]').first();
 
 		if (this.rating_my > 0) {
 			this.$context.find('.inner_your_voice').removeClass('hide');
@@ -49,7 +49,7 @@ class Rating
 
 		let initial_rating = this.rating_my ||  this.rating_all;
 
-		this.$bar_rating.barrating('set', initial_rating);
+		this.$bar.barrating('set', initial_rating);
 
 		this.configureRatingWidget( initial_rating);
 
@@ -58,7 +58,7 @@ class Rating
 
 	private configureRatingWidget(initial_rating)
 	{
-		this.$bar_rating.barrating('show', {
+		this.$bar.barrating('show', {
 			theme: 'css-stars',
 			initialRating: parseFloat(initial_rating) || this.rating_all,
 			onSelect: (value, text, event) => {
@@ -72,7 +72,7 @@ class Rating
 		if (typeof (event) === 'undefined') return;
 
 		if (!selected_star) {
-			this.$bar_rating.barrating('set', this.rating_my || Math.floor(this.rating_all));
+			this.$bar.barrating('set', this.rating_my || Math.floor(this.rating_all));
 
 			this.rating_my = this.rating_my || Math.floor(this.rating_all);
 
