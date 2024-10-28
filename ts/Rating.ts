@@ -6,18 +6,22 @@ class Rating
 	static readonly EVENT_RE_SELECT = 'Rating.EVENT_RE_SELECT';
 
 	public $context: JQuery;
+	// fixme это класс rating не нужно здесь слово rating писать еще раз, это просто $bar
 	private $bar_rating: JQuery;
-	private readonly rating_all_base: number;
+	private readonly rating_base: number;
 
-	constructor($context:JQuery) {
+	constructor($context:JQuery)
+	{
 		this.$context = $context;
 
-		this.rating_all_base = this.rating_all;
+		this.base_all_rating = this.all_rating;
 
 		new RatingText(this);
 
+		// @ts-ignore
 		if (this.$context[0].Rating) return;
 
+		// @ts-ignore
 		this.$context[0].Rating = this;
 
 		this.initRating();
@@ -91,7 +95,7 @@ class Rating
 	private calculate(rating_my)
 	{
 		return rating_my > 0
-			? (((this.rating_all_base * (this.count_votes - 1) ) + parseInt(rating_my) )/ this.count_votes )
+			? (((this.rating_base * (this.count_votes - 1) ) + parseInt(rating_my) )/ this.count_votes )
 			: this.rating_all;
 	}
 

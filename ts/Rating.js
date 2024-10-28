@@ -1,10 +1,12 @@
 class Rating {
     constructor($context) {
         this.$context = $context;
-        this.rating_all_base = this.rating_all;
+        this.rating_base = this.rating_all;
         new RatingText(this);
+        // @ts-ignore
         if (this.$context[0].Rating)
             return;
+        // @ts-ignore
         this.$context[0].Rating = this;
         this.initRating();
     }
@@ -29,6 +31,7 @@ class Rating {
         this.$bar_rating.barrating('show', {
             theme: 'css-stars',
             initialRating: parseFloat(initial_rating) || this.rating_all,
+            initialRating: parseFloat(initialRating) || this.rating,
             onSelect: (value, text, event) => {
                 this.onRatingSelect(value, event);
             }

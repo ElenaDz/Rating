@@ -55,9 +55,9 @@ class RatingText
 		this.$context.find('.your_voice').text(rating_my);
 	}
 
+	// fixme этот метод не использует свойства объекта поэтому он может быть статическим Сделай статическим
 	private declofNum(number, titles) {
 		let cases = [2, 0, 1, 1, 1, 2];
 		return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 	}
-
 }
