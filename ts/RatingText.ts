@@ -12,7 +12,8 @@ class RatingText
 		{
 			this.update();
 
-			if (this.Rating.rating) this.showText();
+			if (this.Rating.rating) this.show();
+			if (this.Rating.rating_my > 0) this.showRatingMy();
 		});
 	}
 
@@ -38,13 +39,19 @@ class RatingText
 		this.$context.find('.rating_my').text(rating_my);
 	}
 
-	// fixme переименовать в show
-	private showText()
+	// fixme переименовать в show ok
+	private show()
 	{
 		this.$context.removeClass('hide');
 	}
 
-	// fixme всегда указывай ссылку на сложный код который ты взяла в сети вот так
+	private showRatingMy()
+	{
+		// fixme Этот класс не может этим заниматься, за это должен отвечать RatingText ok
+		this.$context.find('.inner_rating_my').removeClass('hide');
+	}
+
+	// fixme всегда указывай ссылку на сложный код который ты взяла в сети вот так ok
 	// @link https://ru.stackoverflow.com/questions/89458/%D0%A4%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D1%8F-%D0%B4%D0%BB%D1%8F-%D0%BE%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D0%BD%D0%B8%D1%8F-%D1%81%D0%BB%D0%BE%D0%B2%D0%B0-%D0%BF%D0%BE-%D1%87%D0%B8%D1%81%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%BC%D1%83-1-%D0%B3%D0%BE%D0%B4-2-%D0%B3%D0%BE%D0%B4%D0%B0-5-%D0%BB%D0%B5%D1%82
 	private static declofNum(number, titles) {
 		let cases = [2, 0, 1, 1, 1, 2];

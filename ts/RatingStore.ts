@@ -5,13 +5,9 @@ class RatingStore
 {
     static KEY_LOCAL_STORE = 'rating_store_data';
 
-
     // fixme такой jsdoc с объявлением типа return не понимает phpstorm, так как это ts можно обойтись без jsdoc
-    //  добавь : RatingStoreData[] в строке объявления имени фукнции чтобы объявить тип возвращаемого знания
-    /**
-     * @returns {[RatingStoreData]}
-     */
-    public static getRating()
+    //  добавь : RatingStoreData[] в строке объявления имени фукнции чтобы объявить тип возвращаемого знания ok
+    public static getRating(): RatingStoreData[]
     {
         return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [];
     }
