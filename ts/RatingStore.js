@@ -7,53 +7,51 @@ class RatingStore {
     static getRating() {
         return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [];
     }
-    static setRating(rating_data, id, rating_my) {
-        let list_ratings = [];
-        rating_data.forEach((/** Rating */ rating_store) => {
-            if (rating_store.id === id) {
-                rating_store = this.getMapRating(rating_my, rating_store.id);
+    static setRating(data, id, rating_my) {
+        let data_list = [];
+        data.forEach((/** Rating */ data_store) => {
+            if (data_store.id === id) {
+                data_store = this.getDataMap(rating_my, data_store.id);
             }
-            list_ratings.push(rating_store);
+            data_list.push(data_store);
         });
-        localStorage.setItem(RatingStore.KEY_LOCAL_STORE, JSON.stringify(list_ratings));
+        localStorage.setItem(RatingStore.KEY_LOCAL_STORE, JSON.stringify(data_list));
     }
     static getRatingMeForId(id) {
         let rating_my;
-        let rating_data = RatingStore.getRating();
-        rating_data.forEach((/** RatingStoreData */ rating_store) => {
-            if (rating_store.id === id) {
-                rating_my = rating_store.rating_my;
+        let data = RatingStore.getRating();
+        data.forEach((/** RatingStoreData */ data_store) => {
+            if (data_store.id === id) {
+                rating_my = data_store.rating_my;
             }
         });
         return rating_my;
     }
+    // Это название не меняла, ты его предложил
     static setRatingMeForId(id, rating_my) {
-        let rating_data = this.getRating();
+        let data = this.getRating();
         if (!this.hesRatingForId(id)) {
-            rating_data.push(RatingStore.getMapRating(rating_my, id));
-            this.setRating(rating_data, id, rating_my);
+            data.push(RatingStore.getDataMap(rating_my, id));
+            this.setRating(data, id, rating_my);
         }
         else {
-            rating_data.forEach((/** RatingStoreData */ rating_store) => {
-                if (rating_store.id === id) {
-                    rating_store.rating_my = rating_my;
+            data.forEach((/** RatingStoreData */ data_store) => {
+                if (data_store.id === id) {
+                    data_store.rating_my = rating_my;
                 }
             });
-            this.setRating(rating_data, id, rating_my);
+            this.setRating(data, id, rating_my);
         }
     }
     static hesRatingForId(id) {
-        let rating_data = this.getRating();
-        return !rating_data.find((rating_store) => rating_store.id === id) === false;
+        let data = this.getRating();
+        return !data.find((data_store) => data_store.id === id) === false;
     }
-    /**
-     * @returns {RatingStoreData}
-     */
-    static getMapRating(rating_my = 0, id) {
-        let rating_store_data = new RatingStoreData();
-        rating_store_data.rating_my = rating_my;
-        rating_store_data.id = id;
-        return rating_store_data;
+    static getDataMap(rating_my = 0, id) {
+        let data_store = new RatingStoreData();
+        data_store.rating_my = rating_my;
+        data_store.id = id;
+        return data_store;
     }
 }
 RatingStore.KEY_LOCAL_STORE = 'rating_store_data';

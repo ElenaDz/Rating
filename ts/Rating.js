@@ -21,7 +21,7 @@ class Rating {
     // fixme отказываемся от передачи аргумента в функцию, пускай сам обращается в нужному свойству ok
     showBar() {
         this.$bar.barrating('show', {
-            theme: 'css-rating_my',
+            theme: 'css-stars',
             initialRating: this.rating_displayed,
             onSelect: ((value, text, event) => {
                 if (typeof (event) === 'undefined')
