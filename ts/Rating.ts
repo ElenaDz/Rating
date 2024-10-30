@@ -11,10 +11,6 @@ class Rating
 	{
 		this.$context = $context;
 
-		// fixme удали и избавься от этой костанты, ты сохраняешь данные во втором месте, а данные нужно хранить
-		//  в одном месте, в данном случае в Html (исправила, если я правильно поняла)
-
-		// fixme это должно быть ниже, сейчас не защищено от повторного вызова ok
 		// @ts-ignore
 		if (this.$context[0].Rating) return;
 
@@ -25,19 +21,12 @@ class Rating
 
 		this.$bar = this.$context.find('select[name="rating"]').first();
 
-		// fixme мне кажется эти две строки нужно поменять местами ok
-
 		this.showBar();
-
 		this.updateBar();
 
 		$('body').trigger(Rating.EVENT_INIT);
 	}
 
-	// fixme отказываемся от этого метода, перенеси код в конструктор ok
-
-	// fixme переименовать метод в showBar ok
-	// fixme отказываемся от передачи аргумента в функцию, пускай сам обращается в нужному свойству ok
 	private showBar()
 	{
 		this.$bar.barrating('show', {
@@ -61,8 +50,6 @@ class Rating
 		})
 	}
 
-	// fixme переименовываем метод в updateBar ok
-	// fixme отказываемся от передачи аргумента в функцию, пускай сам обращается в нужному свойству ok
 	private updateBar()
 	{
 		this.$bar.barrating('set', this.rating_displayed);
@@ -82,13 +69,11 @@ class Rating
 		return parseFloat(this.$context.data('rating_all') || 0)
 	}
 
-	// fixme перенеси ниже к свойству rating, все похожие свойства должны быть рядом ok
 	private get rating_displayed():number
 	{
 		return this.rating_my || this.rating  || 0;
 	}
 
-	// fixme перенеси выше к свойству rating, все похожие свойства должны быть рядом ok
 	public get rating_my(): number
 	{
 		return parseInt(RatingStore.getRatingMeForId(this.id));

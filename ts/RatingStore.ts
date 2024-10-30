@@ -1,12 +1,9 @@
-// fixme почему здесь все методы public? исправь на private все которые можно ok
-// fixme бардак с именами методов и переменных Смотри, думай, переименовывай Главное имя в этом классе это data
-//  именно с ним ты работаешь, оно взялось из RatingStoreData и убранным из этого имени имени этого класса
+
 class RatingStore
 {
     static KEY_LOCAL_STORE = 'rating_store_data';
 
-    // fixme такой jsdoc с объявлением типа return не понимает phpstorm, так как это ts можно обойтись без jsdoc
-    //  добавь : RatingStoreData[] в строке объявления имени фукнции чтобы объявить тип возвращаемого знания ok
+
     private static getRating(): RatingStoreData[]
     {
         return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [];
@@ -35,7 +32,7 @@ class RatingStore
     public static getRatingMeForId(id)
     {
         let rating_my;
-        let data = RatingStore.getRating();
+        let data= RatingStore.getRating();
 
         data.forEach((/** RatingStoreData */ data_store) =>
         {
