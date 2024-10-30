@@ -8,19 +8,18 @@ class RatingStore
      */
     public static getRating()
     {
-        return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [new RatingStoreData()];
+        return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [];
     }
 
-    public static setRating(rating_data, id_rating, stars)
+    public static setRating(rating_data, rating_id, stars)
     {
         let list_ratings = [];
 
         rating_data.forEach((/** Rating */rating) =>
         {
-            if (rating.id === id_rating){
+            if (rating.id === rating_id){
                 rating = this.getMapRating(stars, rating.id)
-            } else if (!id_rating){
-                rating = this.getMapRating(0, rating.id)
+
             }
 
             list_ratings.push(rating);
@@ -32,9 +31,45 @@ class RatingStore
         );
     }
 
+    public static getRatingMeForId(id)
+    {
+        let rating_my;
+        let rating_data = RatingStore.getRating();
+
+        rating_data.forEach((/** RatingStoreData */ rating_store) =>
+        {
+            if (rating_store.id_rating === id) {
+                rating_my = rating_store.stars;
+            }
+        })
+        return rating_my;
+    }
+
+    public static setRatingMeForId(id, rating_my)
+    {
+        let rating_data = this.getRating();
+
+        if ( ! this.hesRatingStore(id))
+        {
+            rating_data.push(RatingStore.getMapRating(rating_my, id));
+
+            this.setRating(rating_data, id, rating_my);
+
+        } else {
+            rating_data.forEach((/** RatingStoreData */ rating_store) =>
+            {
+                if (rating_store.id_rating === id) {
+                    rating_store.stars = rating_my;
+                }
+            })
+
+            this.setRating(rating_data, id, rating_my);
+        }
+    }
+
     public static hesRatingStore(id)
     {
-        let rating_data = RatingStore.getRating();
+        let rating_data = this.getRating();
 
         return  !rating_data.find( (rating_store) => rating_store.id_rating === id ) === false;
     }

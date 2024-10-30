@@ -4,35 +4,23 @@ class RatingText {
         this.$context = this.Rating.$context.find('.text');
         $('body').on(Rating.EVENT_INIT + ' ' + Rating.EVENT_SELECT, () => {
             this.update();
-            if (this.Rating.rating_all)
-                this.showRatingText();
+            if (this.Rating.rating)
+                this.showText();
         });
     }
     update() {
-        this.updateRating(this.Rating.rating_all, this.Rating.count_votes, this.Rating.rating_my);
+        this.updateRating(this.Rating.rating, this.Rating.count_votes, this.Rating.rating_my);
     }
-    updateRating(rating_all, count_vote, rating_my) {
-        this.rating_all = rating_all;
-        this.count_votes = count_vote;
-        this.rating_my = rating_my;
-    }
-    // fixme подумать и переименовать
-    showRatingText() {
-        this.$context.removeClass('hide');
-    }
-    // fixme избавиться
-    set rating_all(rating_all) {
-        this.$context.find('.rating_all').text(rating_all);
-    }
-    // fixme избавиться
-    set count_votes(count_votes) {
+    updateRating(rating, count_votes, rating_my) {
+        this.$context.find('.rating_all').text(rating);
         this.$context.find('.count_votes').
             html(count_votes + ' ' +
             '<span>' + RatingText.declofNum(count_votes, ['человек', 'человека', 'человек']) + '</span>');
+        this.$context.find('.rating_my').text(rating_my);
     }
-    // fixme избавиться
-    set rating_my(rating_my) {
-        this.$context.find('.your_voice').text(rating_my);
+    // fixme подумать и переименовать ok
+    showText() {
+        this.$context.removeClass('hide');
     }
     static declofNum(number, titles) {
         let cases = [2, 0, 1, 1, 1, 2];

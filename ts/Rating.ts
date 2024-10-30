@@ -3,8 +3,7 @@ class Rating
 {
 	static readonly EVENT_INIT = 'Rating.EVENT_INIT';
 	static readonly EVENT_SELECT = 'Rating.EVENT_SELECT';
-	// fixme удалить - не используется
-	static readonly EVENT_RE_SELECT = 'Rating.EVENT_RE_SELECT';
+	// fixme удалить - не используется ok
 
 	public $context: JQuery;
 	private $bar: JQuery;
@@ -14,7 +13,7 @@ class Rating
 	{
 		this.$context = $context;
 
-		this.rating_base = this.rating_all;
+		this.rating_base = parseFloat(this.$context.data('rating_all') || 0);
 
 		new RatingText(this);
 
@@ -27,76 +26,61 @@ class Rating
 		this.initRating();
 	}
 
-	private initRating() {
-
+	private initRating()
+	{
 		this.$bar = this.$context.find('select[name="rating"]').first();
 
 		if (this.rating_my > 0) {
-			this.$context.find('.inner_your_voice').removeClass('hide');
+			this.showTextRatingMy();
 		}
 
-		this.updateRating();
+		this.setBar(this.rating_displayed)
 
-		if ( ! this.rating_my) {
-			this.rating_my = 0;
-
-			this.configureRatingWidget( 0);
-
-			$('body').trigger(Rating.EVENT_INIT);
-
-			return;
-		}
-
-		let initial_rating = this.rating_my ||  this.rating_all;
-
-		this.$bar.barrating('set', initial_rating);
-
-		this.configureRatingWidget( initial_rating);
+		this.configureRatingWidget(this.rating_displayed);
 
 		$('body').trigger(Rating.EVENT_INIT);
 	}
 
-	private configureRatingWidget(initial_rating)
+
+	private configureRatingWidget(rating_displayed)
 	{
 		this.$bar.barrating('show', {
 			theme: 'css-stars',
-			initialRating: parseFloat(initial_rating) || this.rating_all,
-			onSelect: (value, text, event) => {
-				this.onRatingSelect(value, event);
-			}
-		});
+			initialRating: rating_displayed,
+			onSelect: ((value, text, event) =>
+			{
+				if (typeof (event) === 'undefined') return;
+
+				// Исправление бага повторного нажатия на одну звезду
+				if (!value) {
+					this.setBar(this.rating_displayed);
+
+					this.rating_my = this.rating_displayed;
+
+				} else {
+					this.rating_my = value;
+				}
+
+				this.showTextRatingMy();
+
+				this.$context.trigger(Rating.EVENT_SELECT);
+			})
+		})
 	}
 
-	private onRatingSelect(selected_star, event)
+	private setBar(initial_rating)
 	{
-		if (typeof (event) === 'undefined') return;
-
-		if ( ! selected_star) {
-			this.$bar.barrating('set', this.rating_my || Math.floor(this.rating_all));
-
-			this.rating_my = this.rating_my || Math.floor(this.rating_all);
-
-		} else {
-			this.rating_my = selected_star;
-		}
-
-		this.$context.find('.inner_your_voice').removeClass('hide');
-
-		this.updateRating();
-
-		this.$context.trigger(Rating.EVENT_SELECT);
+		this.$bar.barrating('set', initial_rating);
 	}
 
-	private updateRating()
+	private showTextRatingMy()
 	{
-		this.rating_all = parseFloat(this.calculate(this.rating_my).toFixed(1));
+		this.$context.find('.inner_rating_my').removeClass('hide');
 	}
 
-	private calculate(rating_my)
+	private get rating_displayed():number
 	{
-		return rating_my > 0
-			? (((this.rating_base * (this.count_votes - 1) ) + parseInt(rating_my) )/ this.count_votes )
-			: this.rating_all;
+		return this.rating_my ||  this.rating  || 0;
 	}
 
 	private get id(): string
@@ -104,66 +88,36 @@ class Rating
 		return this.$context.attr('id');
 	}
 
-	public get rating_all():number
+	public get rating():number
 	{
-		return parseFloat(this.$context.data('rating_all') || 0);
+		let rating = this.rating_my > 0
+			? (((this.rating_base * (this.count_votes - 1) ) + this.rating_my )/ this.count_votes )
+			: this.rating_base;
+
+		return parseFloat(rating.toFixed(1));
 	}
 
 	public get count_votes():number
 	{
-		// fixme повторяющийся код вынеси в переменную
+		let count_votes = parseInt(this.$context.data('count_votes') || 0)
+		// fixme повторяющийся код вынеси в переменную ok
 		return  ! this.rating_my
-			? parseInt(this.$context.data('count_votes') || 0)
-			: parseInt((this.$context.data('count_votes') || 0) + 1);
+			? count_votes
+			: count_votes + 1;
 	}
 
-	// fixme сократи метод до одной строки, смотри ниже подробнее
+	// fixme сократи метод до одной строки, смотри ниже подробнее ok
 	public get rating_my(): number
 	{
-		let rating_my;
-
-		let rating_data = RatingStore.getRating();
-
-		rating_data.forEach((/** RatingStoreData */ rating_store) =>
-		{
-			if (rating_store.id_rating === this.id) {
-				rating_my = rating_store.stars;
-			}
-		})
-
-		return rating_my;
+		return parseInt(RatingStore.getRatingMeForId(this.id));
 	}
 
 	// fixme Rating не должен так много знать про RatingStore, все что он должен у долен уметь это дергать один
 	//  метод "сохрани мою оценку для такого то id" setRatingMeForId(id, rating_my), полностью переписать этот метод
-	//  сократив его до одной строки вызова этого метода
+	//  сократив его до одной строки вызова этого метода ok
 	private set rating_my(rating_my: number)
 	{
-		let rating_data = RatingStore.getRating();
-
-		if ( ! RatingStore.hesRatingStore(this.id))
-		{
-			rating_data.push(RatingStore.getMapRating(rating_my, this.id));
-
-			RatingStore.setRating(rating_data, this.id, rating_my);
-
-		} else {
-			rating_data.forEach((/** RatingStoreData */ rating_store) =>
-			{
-				if (rating_store.id_rating === this.id) {
-					rating_store.stars = rating_my;
-				}
-			})
-
-			RatingStore.setRating(rating_data, this.id, rating_my);
-
-			this.$context.data('rating_my', rating_my);
-		}
-	}
-
-	private set rating_all(rating: number)
-	{
-		this.$context.data('rating_all', rating);
+		RatingStore.setRatingMeForId(this.id, rating_my);
 	}
 
 	public static create($context = $('.b_rating'))
