@@ -1,5 +1,5 @@
 class RatingStoreData {
     constructor() {
-        this.stars = 0;
+        this.rating_my = 0;
     }
 }

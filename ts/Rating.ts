@@ -41,7 +41,7 @@ class Rating
 	private showBar()
 	{
 		this.$bar.barrating('show', {
-			theme: 'css-stars',
+			theme: 'css-rating_my',
 			initialRating: this.rating_displayed,
 			onSelect: ((value, text, event) =>
 			{

@@ -1,5 +1,5 @@
 
 class RatingStoreData{
-    stars = 0;
-    id_rating;
+    rating_my = 0;
+    id;
 }
