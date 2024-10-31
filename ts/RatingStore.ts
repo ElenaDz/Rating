@@ -1,11 +1,9 @@
 
 class RatingStore
 {
-    // fixme rating_store_data больше не соответствует действительности теперь это rating_store_ratings_my ok
     private static KEY_LOCAL_STORE = 'rating_store_ratings_my';
     private static PREFIX_ID = 'id_';
 
-    // fixme items у нас больше нет поэтому придется избавиться от этого слова Остались rating_my во множественном числе ratings_my ok
     private static getRatingsMy(): {}
     {
         return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || {};
@@ -19,7 +17,6 @@ class RatingStore
         );
     }
 
-    // fixme ForRatingId можно убрать так как других вариантов получения просто нет 0k
     public static getRatingMy(rating_id: string)
     {
         let ratings_my= RatingStore.getRatingsMy();
@@ -42,6 +39,4 @@ class RatingStore
     {
         return RatingStore.PREFIX_ID + rating_id;
     }
-
-
 }
