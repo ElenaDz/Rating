@@ -1,11 +1,12 @@
 
 class RatingStore
 {
-    static KEY_LOCAL_STORE = 'rating_store_data';
+    private static KEY_LOCAL_STORE = 'rating_store_data';
+    private static PREFIX_ID = 'id_';
 
-    private static getItems():[]
+    private static getItems():{}
     {
-        return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || [];
+        return JSON.parse(localStorage.getItem(RatingStore.KEY_LOCAL_STORE)) || {};
     }
 
     private static setItems(items)
@@ -20,15 +21,15 @@ class RatingStore
     {
         let items= RatingStore.getItems();
 
-        return items[rating_id];
+        return items[RatingStore.PREFIX_ID +rating_id];
     }
 
     public static setRatingMeForRatingId(rating_id, rating_my)
     {
-        let items = this.getItems();
+         let items = this.getItems();
 
         // @ts-ignore
-        items[rating_id]= rating_my
+        items[RatingStore.PREFIX_ID +rating_id]= rating_my
 
         this.setItems(items);
     }
