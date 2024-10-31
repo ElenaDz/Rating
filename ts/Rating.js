@@ -47,10 +47,10 @@ class Rating {
         return this.rating_my || this.rating || 0;
     }
     get rating_my() {
-        return parseInt(RatingStore.getRatingMeForRatingId(this.id));
+        return parseInt(RatingStore.getRatingMy(this.id));
     }
     set rating_my(rating_my) {
-        RatingStore.setRatingMeForRatingId(this.id, rating_my);
+        RatingStore.setRatingMy(this.id, rating_my);
     }
     get count_votes() {
         let count_votes = parseInt(this.$context.data('count_votes') || 0);

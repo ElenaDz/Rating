@@ -76,12 +76,12 @@ class Rating
 
 	public get rating_my(): number
 	{
-		return parseInt(RatingStore.getRatingMeForRatingId(this.id));
+		return parseInt(RatingStore.getRatingMy(this.id));
 	}
 
 	private set rating_my(rating_my: number)
 	{
-		RatingStore.setRatingMeForRatingId(this.id, rating_my);
+		RatingStore.setRatingMy(this.id, rating_my);
 	}
 
 	public get count_votes():number
