@@ -7,7 +7,6 @@ class RatingStore {
     }
     static getRatingMy(rating_id) {
         let ratings_my = RatingStore.getRatingsMy();
-        // fixme формирование имени свойства дублируется нужно вынести в функцию чтобы не было дублирования ok
         return ratings_my[RatingStore.getKeyRatingMy(rating_id)];
     }
     static setRatingMy(rating_id, rating_my) {
